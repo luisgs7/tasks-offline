@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { ImageBackground, StyleSheet, Text, View } from "react-native"
+import { FlatList, ImageBackground, StyleSheet, Text, View } from "react-native"
 
 import todayImage from '../../assets/imgs/today.jpg'
 
@@ -10,6 +10,20 @@ import commonStyles from "../commonStyles"
 import Task from "../components/Task"
 
 export default class TaskList extends Component {
+    state = {
+        tasks: [{
+            id: Math.random(),
+            desc: 'Comprar Livro de React Native',
+            estimateAt: new Date(),
+            doneAt: new Date(),
+        }, {
+            id: Math.random(),
+            desc: 'Ler Livro de React Native',
+            estimateAt: new Date(),
+            doneAt: null,
+        }]
+    }
+
     render() {
         const today = moment().locale('pt-br').format('ddd, D [de] MMMM')
         return (
@@ -21,8 +35,12 @@ export default class TaskList extends Component {
                     </View>
                 </ImageBackground>
                 <View style={styles.tasklist}>
-                    <Task desc="Comprar carro" estimateAt={new Date()} doneAt={new Date()}/>
-                    <Task desc="Ler Livro" estimateAt={new Date()} doneAt={null}/>
+                    <FlatList 
+                        showsVerticalScrollIndicator={false}
+                        data={this.state.tasks}
+                        keyExtractor={item => `${item.id}`}
+                        renderItem={({item}) => <Task {...item} />}
+                    />
                 </View>
             </View>
         )
